@@ -4,10 +4,12 @@ using Core.Aspects.Caching;
 using Core.Aspects.Secure;
 using Core.Aspects.Transaction;
 using Core.Aspects.Validation;
+using Core.Handler.LocalizationResource;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concreate;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,15 +20,17 @@ namespace Business.Concreate
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
-        public ProductManager(IProductDal productDal)
+        IStringLocalizer<Language> _stringLocalizer;
+        public ProductManager(IProductDal productDal, IStringLocalizer<Language> stringLocalizer)
         {
             _productDal = productDal;
+            _stringLocalizer = stringLocalizer;
         }   
 
         [ValidationAspect(typeof(ProductAddValidation))]
         [SecuredOperation("product.add")]
         [CacheRemoveAspect("IProductService.get")]
-        [TransactionScopeAspect]
+        //[TransactionScopeAspect]
         public async Task<IResult> InsertAsync(Product product)
         {
             List<IResult> logics = new List<IResult>()
@@ -40,11 +44,11 @@ namespace Business.Concreate
                 var response = await _productDal.InsertAsync(product);
                 if (response != 0)
                 {
-                    return new SuccessResult("Başarılı !");
+                    return new SuccessResult(_stringLocalizer["Success"]);
                 }
                 else
                 {
-                    return new ErrorResult("Başarısız !");
+                    return new ErrorResult(_stringLocalizer["Error"]);
                 }
             }
             else
