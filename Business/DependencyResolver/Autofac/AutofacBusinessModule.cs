@@ -17,7 +17,7 @@ namespace Business.DependencyResolver.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ProductDalDapper>().As<IProductDal>().SingleInstance();
+            builder.RegisterType<ProductDalPostgres>().As<IProductDal>().SingleInstance();
             builder.RegisterType<ProductManager>().As<IProductService>().SingleInstance();
 
             builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();

@@ -12,6 +12,7 @@ using Entities.Concreate;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,10 +26,15 @@ namespace Business.Concreate
         {
             _productDal = productDal;
             _stringLocalizer = stringLocalizer;
-        }   
+        }
+
+        public IDataResult<List<Product>> GetAllProduct()
+        {
+            return new DataResult<List<Product>>(_productDal.GetAll().ToList(), "Ürünler Yüklendi !", true);
+        }
 
         [ValidationAspect(typeof(ProductAddValidation))]
-        [SecuredOperation("product.add")]
+        //[SecuredOperation("product.add")]
         [CacheRemoveAspect("IProductService.get")]
         //[TransactionScopeAspect]
         public async Task<IResult> InsertAsync(Product product)

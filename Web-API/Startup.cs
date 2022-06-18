@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -48,6 +49,11 @@ namespace Web_API
             services.AddCors();
 
             services.AddLocalization();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AdvanceBackEndAPI", Version = "v1" });
+            });
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -96,6 +102,8 @@ namespace Web_API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TurquoiseAPI v1"));
             }
 
             app.ConfigureCustomExceptionMiddleware();

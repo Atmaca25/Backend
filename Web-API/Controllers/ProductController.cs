@@ -33,5 +33,18 @@ namespace Web_API.Controllers
                 return BadRequest(result);
             }
         }
+        [HttpGet]
+        public IActionResult GetProducts()
+        {
+            var result =  _productService.GetAllProduct();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }
